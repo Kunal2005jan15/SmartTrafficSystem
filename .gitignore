@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# Virtual environment
+venv/
+
+# Pygame cache / temp files
+*.db
+*.sqlite3
+*.log
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Flask cache / sessions
+instance/
+*.session
+
+# Jupyter / notebook checkpoints (if used)
+.ipynb_checkpoints/
+
+# Large datasets / video files (optional)
+data/*.mp4
+data/*.avi
+
+# Logs
+*.log

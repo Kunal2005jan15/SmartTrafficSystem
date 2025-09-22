@@ -1,0 +1,17 @@
+<html>
+<head>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<h2>Smart Traffic Dashboard</h2>
+<div id="traffic_graph"></div>
+<script>
+var data = [{
+    x: ['Lane 1','Lane 2','Lane 3','Lane 4'],
+    y: {{ lane_density }},
+    type: 'bar'
+}];
+Plotly.newPlot('traffic_graph', data);
+</script>
+</body>
+</html>
