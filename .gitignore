@@ -14,6 +14,8 @@ build/
 
 # Virtual environment
 venv/
+__pycache__/
+*.pyc
 
 # Pygame cache / temp files
 *.db
@@ -40,3 +42,41 @@ data/*.avi
 
 # Logs
 *.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# VS Code settings
+.vscode/
+
+# MacOS / Linux / Windows system files
+.DS_Store
+Thumbs.db
+
+# Pygame temporary files
+*.py~ 
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Python egg / distribution files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Dash / Streamlit / Flask secret files
+*.env
+.env.local

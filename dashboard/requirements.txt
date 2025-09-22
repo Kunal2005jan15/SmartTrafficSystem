@@ -1,0 +1,24 @@
+import streamlit as st
+import time
+from ai.traffic_predictor import TrafficPredictor
+
+# Initialize predictor
+predictor = TrafficPredictor("Main Intersection")
+predictor.train()
+
+st.title("Smart Traffic Management Dashboard")
+
+# Real-time loop
+while True:
+    # Predict densities
+    density = predictor.predict_next()
+    
+    st.subheader("Traffic Density Prediction")
+    st.metric(label="Predicted Vehicles at Intersection", value=density)
+    
+    st.subheader("Emergency Vehicle Alert")
+    emergency = "Detected!" if density > 45 else "None"  # Example logic
+    st.write(emergency)
+    
+    # Wait for next update
+    time.sleep(1)

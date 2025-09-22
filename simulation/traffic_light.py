@@ -1,27 +1,16 @@
+# traffic_light.py
 import pygame
 
 class TrafficLight:
-    def __init__(self, x, y, green_time=120, red_time=120):
+    WIDTH = 20
+    HEIGHT = 60
+
+    def __init__(self, x, y, direction):
         self.x = x
         self.y = y
-        self.green_time = green_time
-        self.red_time = red_time
-        self.state = "RED"
-        self.timer = 0
+        self.direction = direction
+        self.state = "red"  # initial state
 
-    def update(self, vehicle_count=0):
-        # Adaptive logic: more vehicles → longer green
-        if self.state == "GREEN":
-            self.timer += 1
-            if self.timer > self.green_time + vehicle_count*2:
-                self.state = "RED"
-                self.timer = 0
-        else:
-            self.timer += 1
-            if self.timer > self.red_time:
-                self.state = "GREEN"
-                self.timer = 0
-
-    def draw(self, win):
-        color = (0,255,0) if self.state=="GREEN" else (255,0,0)
-        pygame.draw.circle(win, color, (self.x, self.y), 20)
+    def draw(self, screen):
+        color = (255, 0, 0) if self.state == "red" else (0, 255, 0)
+        pygame.draw.rect(screen, color, (self.x, self.y, TrafficLight.WIDTH, TrafficLight.HEIGHT))

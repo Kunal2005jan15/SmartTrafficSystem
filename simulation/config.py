@@ -1,0 +1,6 @@
+# config.py
+WIDTH = 800
+HEIGHT = 800
+STOP_OFFSET = 60
+LANE_WIDTH = 30
+FPS = 60
