@@ -1,4 +1,6 @@
 # main.py
+import json
+
 import pygame
 import random
 from simulation.vehicle import Vehicle
@@ -93,6 +95,27 @@ def update_traffic_lights():
         for light in red_lights:
             light.state = "green"
 
+def export_simulation_data():
+    data = {
+        "vehicles": [
+            {"x": v.x, "y": v.y, "direction": v.direction, "is_emergency": v.is_emergency}
+            for v in vehicles
+        ],
+        "traffic_lights": [
+            {"direction": l.direction, "state": l.state} for l in lights
+        ],
+        "lane_counts": {
+            "N": sum(1 for v in vehicles if v.direction == "N"),
+            "S": sum(1 for v in vehicles if v.direction == "S"),
+            "E": sum(1 for v in vehicles if v.direction == "E"),
+            "W": sum(1 for v in vehicles if v.direction == "W")
+        },
+        "predicted_density": predictor.history[-1] if predictor.history else None
+    }
+    with open("simulation/data.json", "w") as f:
+        json.dump(data, f)
+
+
 def draw_window():
     WIN.fill(GRAY)
 
@@ -117,6 +140,7 @@ def draw_window():
     WIN.blit(font.render("Yellow: Emergency Vehicle", True, YELLOW), (10, 30))
 
     pygame.display.update()
+    export_simulation_data()
 
 def main_loop():
     clock = pygame.time.Clock()
@@ -147,6 +171,8 @@ def main_loop():
         draw_window()
 
     pygame.quit()
+
+
 
 if __name__ == "__main__":
     main_loop()
