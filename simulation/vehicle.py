@@ -1,63 +1,98 @@
 # vehicle.py
 import pygame
-from simulation.config import WIDTH, HEIGHT, STOP_OFFSET, LANE_WIDTH
-import random
+from simulation.config import WIDTH, HEIGHT, STOP_OFFSET
+
+VEHICLE_WIDTH = 20
+VEHICLE_HEIGHT = 40
+BASE_SPEED = 2.5
+MIN_SPEED = 0.8
+
 
 class Vehicle:
-    WIDTH = 20
-    HEIGHT = 40
-    SPEED = 2
-
+    """
+    Vehicle logic:
+    - Stops at red/yellow before the stop line.
+    - Once it crosses the intersection center, it never stops again (like real traffic).
+    - Emergency vehicles always pass.
+    """
     def __init__(self, direction, is_emergency=False):
         self.direction = direction
         self.is_emergency = is_emergency
-        self.color = (255, 255, 0) if is_emergency else (0, 0, 255)
-        self.set_start_pos()
+        self.color = (255, 200, 0) if is_emergency else (0, 120, 255)
+        self.x, self.y = self._start_pos_for_direction(direction)
+        self.speed = BASE_SPEED
+        self.has_crossed = False  # flag set after passing intersection center
 
-    def set_start_pos(self):
-        if self.direction == "N":
-            self.x = WIDTH//2 - LANE_WIDTH
-            self.y = 0 - Vehicle.HEIGHT
-        elif self.direction == "S":
-            self.x = WIDTH//2 + LANE_WIDTH
-            self.y = HEIGHT
-        elif self.direction == "E":
-            self.x = 0 - Vehicle.HEIGHT
-            self.y = HEIGHT//2 - LANE_WIDTH
-        elif self.direction == "W":
-            self.x = WIDTH
-            self.y = HEIGHT//2 + LANE_WIDTH
+    def _start_pos_for_direction(self, d):
+        if d == "N":
+            return (WIDTH // 2 - 10, -60)         
+        if d == "S":
+            return (WIDTH // 2 + 10, HEIGHT + 60) 
+        if d == "E":
+            return (WIDTH + 60, HEIGHT // 2 - 10) 
+        if d == "W":
+            return (-60, HEIGHT // 2 + 10)        
+        return (WIDTH // 2, HEIGHT // 2)
+
+    def _passed_intersection(self):
+        """Check if vehicle has fully entered/crossed the intersection center."""
+        if self.direction == "N" and self.y > HEIGHT // 2:
+            return True
+        if self.direction == "S" and self.y < HEIGHT // 2:
+            return True
+        if self.direction == "E" and self.x < WIDTH // 2:
+            return True
+        if self.direction == "W" and self.x > WIDTH // 2:
+            return True
+        return False
 
     def _is_before_stop_line(self, light):
-        if self.direction == "N":
-            return self.y + Vehicle.HEIGHT < HEIGHT//2 - STOP_OFFSET
-        elif self.direction == "S":
-            return self.y > HEIGHT//2 + STOP_OFFSET
-        elif self.direction == "E":
-            return self.x + Vehicle.HEIGHT < WIDTH//2 - STOP_OFFSET
-        elif self.direction == "W":
-            return self.x > WIDTH//2 + STOP_OFFSET
+        """Check if vehicle is still before its stop line (only matters if light is red/yellow)."""
+        if self.direction == "N" and self.y + VEHICLE_HEIGHT >= HEIGHT // 2 - STOP_OFFSET:
+            return True
+        if self.direction == "S" and self.y <= HEIGHT // 2 + STOP_OFFSET:
+            return True
+        if self.direction == "E" and self.x <= WIDTH // 2 + STOP_OFFSET:
+            return True
+        if self.direction == "W" and self.x + VEHICLE_WIDTH >= WIDTH // 2 - STOP_OFFSET:
+            return True
         return False
 
     def move(self, lights):
-        # Check the relevant light
+        # Emergency vehicles never stop
+        if self.is_emergency:
+            self._advance()
+            return
+
+        # Mark as crossed once vehicle is inside the intersection
+        if not self.has_crossed and self._passed_intersection():
+            self.has_crossed = True
+
+        # If already crossed → ignore signals
+        if self.has_crossed:
+            self._advance()
+            return
+
+        # Otherwise obey signals
         for light in lights:
             if light.direction == self.direction:
-                if self.is_emergency:
-                    # Emergency vehicles ignore red light
-                    pass
-                elif self._is_before_stop_line(light) and light.state == "red":
-                    return  # stop before stop line
+                if light.state == "red" and self._is_before_stop_line(light):
+                    return  # stop
+                if light.state == "yellow" and self._is_before_stop_line(light):
+                    self.speed = max(MIN_SPEED, self.speed * 0.6)  # slow down
+        self._advance()
 
-        # Move
+    def _advance(self):
+        """Move forward depending on direction."""
         if self.direction == "N":
-            self.y += Vehicle.SPEED
+            self.y += self.speed
         elif self.direction == "S":
-            self.y -= Vehicle.SPEED
+            self.y -= self.speed
         elif self.direction == "E":
-            self.x += Vehicle.SPEED
+            self.x -= self.speed
         elif self.direction == "W":
-            self.x -= Vehicle.SPEED
+            self.x += self.speed
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x, self.y, Vehicle.WIDTH, Vehicle.HEIGHT))
+        rect = pygame.Rect(int(self.x), int(self.y), VEHICLE_WIDTH, VEHICLE_HEIGHT)
+        pygame.draw.rect(screen, self.color, rect)

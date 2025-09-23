@@ -80,3 +80,64 @@ build/
 # Dash / Streamlit / Flask secret files
 *.env
 .env.local
+# ------------------------
+# Python
+# ------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Jupyter
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# ------------------------
+# Simulation / Pygame
+# ------------------------
+# Pygame captures / recordings
+*.png
+*.jpg
+*.jpeg
+*.mp4
+
+# Runtime traffic counts
+latest_counts.json
+
+# ------------------------
+# AI / YOLO
+# ------------------------
+# Model weights (large)
+*.pt
+
+# YOLO training outputs
+runs/
+
+# Local detection zone config (if personal)
+detection/zones.json
+
+# ------------------------
+# IDEs / Editors
+# ------------------------
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/

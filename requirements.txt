@@ -1,0 +1,8 @@
+pygame
+numpy
+pandas
+scikit-learn
+
+# Optional for real detection:
+ultralytics
+opencv-python

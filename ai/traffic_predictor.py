@@ -1,20 +1,26 @@
 # traffic_predictor.py
 import random
+import collections
 
 class TrafficPredictor:
+    """
+    Simple prototype predictor:
+    - Keeps a small rolling history of integer counts
+    - predict_next returns a small variation of last value
+    """
     def __init__(self, name="Intersection"):
         self.name = name
-        self.history = []
+        self.history = collections.deque(maxlen=50)
 
     def train(self):
-        self.history = [random.randint(20, 50) for _ in range(10)]
-        print(f"[{self.name}] AI predictor initialized with fake historical data.")
+        # Initialize with some fake historical counts (demo purpose)
+        self.history.extend([random.randint(5, 25) for _ in range(12)])
 
     def predict_next(self):
         if not self.history:
             self.train()
-        next_val = max(5, min(60, self.history[-1] + random.randint(-8, 8)))
+        last = int(self.history[-1])
+        variation = random.randint(-4, 6)
+        next_val = max(0, last + variation)
         self.history.append(next_val)
-        if len(self.history) > 50:
-            self.history.pop(0)
         return next_val
