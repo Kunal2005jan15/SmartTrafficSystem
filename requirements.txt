@@ -6,3 +6,7 @@ scikit-learn
 # Optional for real detection:
 ultralytics
 opencv-python
+pytube
+yt-dlp
+tensorflow
+

@@ -141,3 +141,10 @@ detection/zones.json
 
 # PyCharm
 .idea/
+ultralytics
+opencv-python
+pytube
+yt-dlp
+tensorflow
+pip install numpy==1.23.5
+opencv-python==4.5.5.64
