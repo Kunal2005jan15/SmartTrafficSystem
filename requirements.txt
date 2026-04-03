@@ -6,6 +6,6 @@ numpy
 scikit-learn
 
 # Optional – for future live detection integration
-ltralytics
+ultralytics
 opencv-python
 yt-dlp
