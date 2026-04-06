@@ -1,91 +1,229 @@
-# 🚦 Smart Traffic Management System
+# 🚦 SmartTrafficSystem
 
-An AI-powered traffic simulation with adaptive signal control, ML traffic prediction, and emergency vehicle preemption — all rendered in a real-time professional dashboard.
+An AI-powered traffic management system combining **YOLOv8 vehicle detection**, **machine learning traffic prediction**, and an **adaptive signal simulation dashboard**.
 
 ---
 
-## Features
+## ✨ Features
 
 | Module | What it does |
 |---|---|
-| **Adaptive Signal Control** | Adjusts green-light durations dynamically based on live queue lengths and ML predictions |
-| **ML Traffic Predictor** | Scikit-learn RandomForest trained online during simulation; predicts density N steps ahead |
-| **Emergency Preemption** | Detects approaching emergency vehicles and clears their path within seconds |
-| **Multi-vehicle Simulation** | Cars, trucks, buses, and emergency vehicles with realistic lane behaviour |
-| **Real-time Dashboard** | KPI cards, live charts, phase timers, and one-click mode controls |
+| 🚗 **Vehicle Detection** | Detects & counts vehicles frame-by-frame using YOLOv8 |
+| 📈 **Traffic Predictor** | Forecasts traffic volume using RandomForest on historical data |
+| 🟢 **Adaptive Signal Control** | Adjusts green/red timing dynamically based on vehicle count |
+| 📊 **Simulation Dashboard** | pygame-based real-time visual of intersection state |
+| 💾 **Model Persistence** | Trained models saved as `.pkl` — no retraining every run |
+| 🎬 **Video Output** | Annotated detection video saved to `data/output_<timestamp>.mp4` |
 
 ---
 
-## Setup
-
-```bash
-# 1. Clone / copy the project
-cd SmartTrafficSystem
-
-# 2. Create a virtual environment (recommended)
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Run the simulation
-python -m simulation.main
-```
-
-Requires **Python 3.10+** and a display (runs a pygame window).
-
----
-
-## Controls
-
-| Key / Button | Action |
-|---|---|
-| `N` | Normal traffic mode |
-| `R` | Rush hour (high density) |
-| `G` | Night mode (low density) |
-| `E` | Spawn emergency vehicle |
-| `P` / `Space` | Pause / Resume |
-| `ESC` / `Q` | Quit |
-
-All controls are also available as clickable buttons in the dashboard panel.
-
----
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 SmartTrafficSystem/
-├── simulation/
-│   ├── config.py          # All constants and layout parameters
-│   ├── vehicle.py         # Vehicle model (types, movement, rendering)
-│   ├── traffic_light.py   # Signal controller + adaptive phase logic
-│   ├── ml_predictor.py    # RandomForest density predictor
-│   ├── intersection.py    # Intersection manager + emergency detection
-│   ├── dashboard.py       # Real-time dashboard renderer
-│   └── main.py            # Entry point
+├── run.py                         ← ROOT CLI (NEW — start here)
 ├── requirements.txt
-└── README.md
+├── pytest.ini
+│
+├── ai/
+│   ├── detect_video.py            ← Vehicle detection (IMPROVED)
+│   ├── vehicle_detection.py       ← Core detection logic
+│   └── traffic_predictor.py       ← ML forecasting (IMPROVED)
+│
+├── detection/
+│   └── vehicle_detection_demo.py  ← Quick demo script
+│
+├── simulation/
+│   ├── main.py                    ← Simulation entry point
+│   ├── dashboard.py               ← pygame visualization
+│   ├── traffic_light.py           ← Adaptive signal logic
+│   ├── vehicle.py                 ← Vehicle model
+│   ├── config.py                  ← Settings
+│   └── data.json                  ← Sample simulation data
+│
+├── data/
+│   ├── traffic_history.csv        ← Historical dataset
+│   └── output_*.mp4               ← Annotated detection outputs (auto-generated)
+│
+├── models/                        ← Auto-created on first run
+│   ├── yolov8n.pt                 ← YOLO weights (auto-downloaded)
+│   └── traffic_predictor.pkl      ← Trained predictor (saved after first run)
+│
+└── tests/
+    └── test_smart_traffic.py      ← pytest unit tests (NEW)
 ```
 
 ---
 
-## ML Model
+## ⚙️ Setup
 
-The predictor uses a **RandomForestRegressor** (separate models for N-S and E-W axes) trained on a rolling window of simulation history. It starts with synthetic warm-up data and retrains every 60 ticks as live data accumulates. The predicted density is used by the signal controller to bias green-time allocation toward the busier direction.
+### 1. Clone the repo
+```bash
+git clone https://github.com/Kunal2005jan15/SmartTrafficSystem.git
+cd SmartTrafficSystem
+```
+
+### 2. (Recommended) Create a virtual environment
+```bash
+python -m venv venv
+
+# Windows:
+venv\Scripts\activate
+
+# Mac/Linux:
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+> **Note:** `ultralytics` will auto-download `yolov8n.pt` (~6MB) on first detection run. You need an internet connection the first time.
 
 ---
 
-## Emergency Vehicle Flow
+## 🚀 How to Run
 
-1. Vehicle spawns as `type=emergency` (red body, blue/red siren)
-2. Intersection controller detects it within **4.5 road-widths** of centre
-3. Current green is cut to yellow immediately; all-red follows
-4. Emergency vehicle's direction gets a dedicated green for **6 seconds**
-5. Normal adaptive cycle resumes automatically
+### Option A — Root CLI (recommended)
+
+```bash
+# Vehicle detection on a recorded video
+python run.py detect --video data/sample.mp4
+
+# Traffic simulation dashboard
+python run.py simulate
+
+# Train/load traffic predictor
+python run.py predict
+
+# Full pipeline (predict → detect + simulate in parallel)
+python run.py all --video data/sample.mp4
+```
+
+### Option B — Run modules directly
+
+```bash
+# Detection
+cd ai
+python detect_video.py --video ../data/sample.mp4
+
+# Simulation
+cd simulation
+python main.py
+
+# Predictor
+cd ai
+python traffic_predictor.py
+```
 
 ---
 
-## Planned: Live Feed Integration
+## 🎥 Recommended Test Video
 
-The `ai/` directory is prepared for YOLOv8-based real vehicle detection from webcam or video files. Once integrated, the ML predictor will consume real density observations instead of simulated ones.
+For the best prototype demo, use **UA-DETRAC** — real overhead CCTV traffic footage:
+
+- Download: https://detrac-db.rit.albany.edu
+- Place any `.mp4` file in `data/` folder
+- Run: `python run.py detect --video data/your_video.mp4`
+
+**Quick alternative** — download a free traffic video via yt-dlp:
+```bash
+yt-dlp "https://www.youtube.com/watch?v=wqctLW0Hb_0" -o data/sample.mp4
+```
+(Search YouTube for "traffic intersection CCTV" for good overhead angle videos)
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# With coverage report
+pytest --cov=. tests/
+
+# Run a specific test class
+pytest tests/ -v -k "TestSignalRecommendation"
+```
+
+Expected output:
+```
+tests/test_smart_traffic.py::TestSignalRecommendation::test_zero_vehicles_is_low  PASSED
+tests/test_smart_traffic.py::TestSignalRecommendation::test_high_traffic ...       PASSED
+tests/test_smart_traffic.py::TestTrafficPredictor::test_model_save_load            PASSED
+...
+```
+
+---
+
+## 🖥️ Demo Presentation Guide
+
+Best way to showcase the prototype:
+
+1. **Open two terminals side by side**
+   - Terminal 1: `python run.py detect --video data/sample.mp4`
+   - Terminal 2: `python run.py simulate`
+
+2. **What judges/viewers will see:**
+   - Detection window: bounding boxes around vehicles + live count + signal recommendation overlay
+   - Simulation window: intersection with traffic lights adapting in real time
+
+3. **Record your screen** using OBS Studio (free) for submission videos
+
+4. **Show two scenarios** back to back:
+   - Low traffic video → short green time (15s)
+   - Dense traffic video → extended green time (60s)
+
+---
+
+## 📊 How Adaptive Signal Timing Works
+
+| Vehicle Count | Signal State | Green Duration |
+|---|---|---|
+| 0 – 5 | 🟢 Low traffic | 15 seconds |
+| 6 – 15 | 🟡 Medium traffic | 30 seconds |
+| 16+ | 🔴 High traffic | 60 seconds |
+
+The detector counts vehicles per frame → feeds count to `traffic_light.py` → duration updates dynamically.
+
+---
+
+## 🔧 Configuration
+
+Edit `simulation/config.py` to adjust:
+- Intersection size
+- Min/max green time
+- Vehicle spawn rate (simulation)
+- Detection confidence threshold
+
+---
+
+## 📦 Dependencies
+
+| Package | Purpose |
+|---|---|
+| `ultralytics` | YOLOv8 vehicle detection |
+| `opencv-python` | Video I/O and frame processing |
+| `scikit-learn` | RandomForest traffic predictor |
+| `pygame` | Simulation dashboard rendering |
+| `pandas` / `numpy` | Data handling |
+| `pytest` | Unit testing |
+
+---
+
+## 🛣️ Future Improvements
+
+- [ ] Multi-intersection coordination
+- [ ] Emergency vehicle priority detection
+- [ ] License plate recognition (ANPR)
+- [ ] Web dashboard (Flask/FastAPI)
+- [ ] Edge deployment (Raspberry Pi / Jetson Nano)
+- [ ] Night/rain condition handling
+
+---
+
+## 👤 Author
+
+**Kunal** — [@Kunal2005jan15](https://github.com/Kunal2005jan15)

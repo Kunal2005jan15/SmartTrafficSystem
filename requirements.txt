@@ -1,11 +1,21 @@
-# Smart Traffic Management System — Core Requirements
-# Install: pip install -r requirements.txt
+# SmartTrafficSystem — Professional Rebuild Dependencies
+# Python Version: 3.12.x
 
-pygame
+# ── Core Simulation & UI ─────────────────────────────────────────────────────
+pygame-ce             # Community Edition is more stable on Python 3.12+
 numpy
+pandas
+
+# ── Machine Learning & AI ────────────────────────────────────────────────────
+torch                 # Essential backend for Ultralytics/DQN
+torchvision
 scikit-learn
 
-# Optional – for future live detection integration
-ultralytics
+# ── Computer Vision ──────────────────────────────────────────────────────────
 opencv-python
-yt-dlp
+ultralytics           # YOLO engine (handles vehicle detection)
+
+# ── Utilities & Testing ──────────────────────────────────────────────────────
+yt-dlp                # Sample video retrieval
+pytest
+pytest-cov            # Code coverage for your test suite

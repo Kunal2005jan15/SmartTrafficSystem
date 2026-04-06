@@ -1,150 +1,44 @@
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.py[cod]
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
-*.manifest
-*.spec
-
-# Virtual environment
-venv/
-__pycache__/
-*.pyc
-
-# Pygame cache / temp files
-*.db
-*.sqlite3
-*.log
-
-# VS Code settings
-.vscode/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Flask cache / sessions
-instance/
-*.session
-
-# Jupyter / notebook checkpoints (if used)
-.ipynb_checkpoints/
-
-# Large datasets / video files (optional)
-data/*.mp4
-data/*.avi
-
-# Logs
-*.log
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Virtual environment
-venv/
-ENV/
-env/
-.venv/
-
-# VS Code settings
-.vscode/
-
-# MacOS / Linux / Windows system files
-.DS_Store
-Thumbs.db
-
-# Pygame temporary files
-*.py~ 
-
-# Logs and databases
-*.log
-*.sqlite3
-
-# Python egg / distribution files
-*.egg
-*.egg-info/
-dist/
-build/
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
-# Dash / Streamlit / Flask secret files
-*.env
-.env.local
-# ------------------------
-# Python
-# ------------------------
-__pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-*.so
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
 
 # Virtual environments
-.venv/
 venv/
 env/
-ENV/
-*.egg-info/
+.env/
+.venv/
 
-# Logs and temp files
-*.log
-*.tmp
-*.swp
+# Model files (large, auto-generated)
+models/*.pt
+models/*.pkl
+models/*.onnx
+models/*.h5
+
+# Generated detection output videos
+data/output_*.mp4
 
 # Jupyter
 .ipynb_checkpoints/
+*.ipynb
 
-# System files
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
 
-# ------------------------
-# Simulation / Pygame
-# ------------------------
-# Pygame captures / recordings
-*.png
-*.jpg
-*.jpeg
-*.mp4
-
-# Runtime traffic counts
-latest_counts.json
-
-# ------------------------
-# AI / YOLO
-# ------------------------
-# Model weights (large)
-*.pt
-
-# YOLO training outputs
-runs/
-
-# Local detection zone config (if personal)
-detection/zones.json
-
-# ------------------------
-# IDEs / Editors
-# ------------------------
-# VSCode
-.vscode/
-*.code-workspace
-
-# PyCharm
-.idea/
-ultralytics
-opencv-python
-pytube
-yt-dlp
-tensorflow
-pip install numpy==1.23.5
-opencv-python==4.5.5.64
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/

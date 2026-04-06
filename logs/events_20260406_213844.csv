@@ -1,0 +1,24 @@
+wall_time,sim_tick,event_type,details
+2026-04-06T21:38:44,0,session_start,mode=normal
+2026-04-06T21:38:44,0,phase_change,phase=0 | adaptive_green_s=25.0
+2026-04-06T21:38:49,318,phase_change,phase=1 | adaptive_green_s=30.5
+2026-04-06T21:38:54,593,emergency_preemption,phase=1
+2026-04-06T21:38:59,901,emergency_preemption,phase=1
+2026-04-06T21:39:17,2014,emergency_preemption,phase=1
+2026-04-06T21:39:25,2458,phase_change,phase=0 | adaptive_green_s=6.0
+2026-04-06T21:39:25,2458,emergency_preemption,phase=0
+2026-04-06T21:39:35,3058,phase_change,phase=1 | adaptive_green_s=6.0
+2026-04-06T21:39:35,3058,emergency_preemption,phase=1
+2026-04-06T21:39:38,3255,emergency_preemption,phase=1
+2026-04-06T21:39:45,3699,phase_change,phase=0 | adaptive_green_s=6.0
+2026-04-06T21:39:45,3699,emergency_preemption,phase=0
+2026-04-06T21:39:49,3883,emergency_preemption,phase=0
+2026-04-06T21:39:56,4323,phase_change,phase=1 | adaptive_green_s=6.0
+2026-04-06T21:39:56,4323,emergency_preemption,phase=1
+2026-04-06T21:40:06,4923,phase_change,phase=0 | adaptive_green_s=60.0
+2026-04-06T21:40:11,5244,emergency_preemption,phase=0
+2026-04-06T21:40:21,5831,phase_change,phase=1 | adaptive_green_s=6.0
+2026-04-06T21:40:21,5831,emergency_preemption,phase=1
+2026-04-06T21:40:31,6431,phase_change,phase=0 | adaptive_green_s=6.0
+2026-04-06T21:40:31,6431,emergency_preemption,phase=0
+2026-04-06T21:40:41,6861,session_end,total_passed=64 | emergency_events=23
